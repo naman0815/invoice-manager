@@ -40,7 +40,7 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/invoice-manager">
       <AuthProvider>
         <ToastProvider>
           <AppContent />
