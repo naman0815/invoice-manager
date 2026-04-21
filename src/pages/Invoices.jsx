@@ -63,13 +63,17 @@ export default function Invoices() {
         matchDate = invDate >= startOfWeek
       } else if (dateFilter === 'month') {
         matchDate = invDate.getMonth() === now.getMonth() && invDate.getFullYear() === now.getFullYear()
+      } else if (dateFilter === 'lastMonth') {
+        const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+        const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0)
+        matchDate = invDate >= lastMonth && invDate <= endOfLastMonth
       } else if (dateFilter === 'year') {
         matchDate = invDate.getFullYear() === now.getFullYear()
       }
     }
 
     return matchSearch && matchDate
-  })
+  }).sort((a, b) => new Date(b.invoice_date) - new Date(a.invoice_date) || new Date(b.created_at) - new Date(a.created_at))
 
   // Reset page when filter changes
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
@@ -121,6 +125,7 @@ export default function Invoices() {
             { id: 'all', label: 'All Time' },
             { id: 'week', label: 'This Week' },
             { id: 'month', label: 'This Month' },
+            { id: 'lastMonth', label: 'Last Month' },
             { id: 'year', label: 'This Year' }
           ].map(t => (
             <button

@@ -15,6 +15,7 @@ export function useInvoices() {
       .from('invoices')
       .select('*')
       .eq('user_id', user.id)
+      .order('invoice_date', { ascending: false })
       .order('created_at', { ascending: false })
     if (error) setError(error.message)
     else { setInvoices(data || []); setError(null) }

@@ -28,7 +28,9 @@ export default function Dashboard() {
     getStats().then(setStats)
   }, [getStats])
 
-  const recent = invoices.slice(0, 8)
+  const recent = [...invoices]
+    .sort((a, b) => new Date(b.invoice_date) - new Date(a.invoice_date) || new Date(b.created_at) - new Date(a.created_at))
+    .slice(0, 8)
 
   return (
     <>
