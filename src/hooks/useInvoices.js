@@ -79,11 +79,16 @@ export function useInvoices() {
   const getStats = useCallback(async () => {
     if (!user) return {}
     const now = new Date()
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+    const startOfMonthStr = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0]
     
     const [monthRes, allRes] = await Promise.all([
-      supabase.from('invoices').select('total, status').eq('user_id', user.id).gte('created_at', startOfMonth),
-      supabase.from('invoices').select('total, status').eq('user_id', user.id)
+      supabase.from('invoices')
+        .select('total, status')
+        .eq('user_id', user.id)
+        .gte('invoice_date', startOfMonthStr),
+      supabase.from('invoices')
+        .select('total, status')
+        .eq('user_id', user.id)
     ])
 
     const monthData = monthRes.data || []
@@ -91,10 +96,8 @@ export function useInvoices() {
 
     const monthRevenue = monthData.filter(i => i.status !== 'cancelled').reduce((s, i) => s + (i.total || 0), 0)
     const allRevenue = allData.filter(i => i.status !== 'cancelled').reduce((s, i) => s + (i.total || 0), 0)
-    const paid = allData.filter(i => i.status === 'paid').length
-    const pending = allData.filter(i => ['draft', 'sent'].includes(i.status)).length
 
-    return { monthRevenue, allRevenue, paid, pending, total: allData.length }
+    return { monthRevenue, allRevenue, total: allData.length }
   }, [user])
 
 

@@ -104,22 +104,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Quick Stats Row */}
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 'var(--space-3)', marginBottom: 'var(--space-6)'
-        }}>
-          {[
-            { label: 'Paid', value: stats?.paid ?? 0, color: 'var(--color-success)' },
-            { label: 'Pending', value: stats?.pending ?? 0, color: 'var(--color-warning)' },
-            { label: 'Items', value: items.length, color: 'var(--color-info)' },
-          ].map(s => (
-            <div key={s.label} className="card card-sm" style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 'var(--font-size-xl)', fontWeight: 700, color: s.color }}>{s.value}</div>
-              <div className="text-secondary text-xs">{s.label}</div>
-            </div>
-          ))}
-        </div>
+        {/* Quick Stats Row moved to grid or removed */}
+        {/* We keep Items count in the main grid instead of purple users if needed, but let's just remove the row for now as requested */}
 
         {/* Recent Invoices */}
         <div style={{ marginBottom: 'var(--space-4)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -150,7 +136,6 @@ export default function Dashboard() {
                 </div>
                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
                   <div className="font-semibold" style={{ fontSize: 'var(--font-size-sm)' }}>{formatCurrency(inv.total)}</div>
-                  <StatusBadge status={inv.status} />
                 </div>
               </div>
             ))}
